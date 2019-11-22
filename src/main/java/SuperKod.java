@@ -15,13 +15,37 @@ import com.intellij.openapi.wm.WindowManager;
 import com.intellij.ui.awt.RelativePoint;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-public class SuperKod extends AnAction {
+
+class MyWindowFocusListener implements WindowFocusListener {
 
     @Override
-    public void actionPerformed(@NotNull AnActionEvent e) {
+    public void windowGainedFocus(WindowEvent e) {
+    }
+
+    @Override
+    public void windowLostFocus(WindowEvent e) {
+        SuperKod.execute();
+    }
+}
+
+
+public class SuperKod extends AnAction {
+
+    static {
+
+        DataContext dataContext = DataManager.getInstance().getDataContext();
+        Project project = (Project) dataContext.getData(DataConstants.PROJECT);
+
+        WindowManager.getInstance().suggestParentWindow(project).addWindowFocusListener(new MyWindowFocusListener());
+    }
+
+    public static void execute() {
+
         DataContext dataContext = DataManager.getInstance().getDataContext();
         Project project = (Project) dataContext.getData(DataConstants.PROJECT);
         IdeFrame ideFrame = WindowManager.getInstance().getIdeFrame(project);
@@ -45,7 +69,10 @@ public class SuperKod extends AnAction {
                     .createBalloon()
                     .show(RelativePoint.getSouthEastOf(ideFrame.getComponent()), Balloon.Position.above);
         }
-
     }
 
+    @Override
+    public void actionPerformed(@NotNull AnActionEvent e) {
+        execute();
+    }
 }
