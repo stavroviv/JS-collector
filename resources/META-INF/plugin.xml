@@ -1,0 +1,25 @@
+<idea-plugin>
+    <id>js-collector.untitled</id>
+    <name>JS Petshop collector</name>
+    <vendor email="petshop@support.ru" url="http://petshop.ru">petshop.ru</vendor>
+
+    <description>JS Collector for petshop CRM project. Collects Ext JS files into one file.</description>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <action id="SuperKod" class="main.java.SuperKod" text="JS collector" description="JS collector"
+                icon="/icons/petshop.png">
+            <add-to-group group-id="ToolbarRunGroup" anchor="after" relative-to-action="Stop"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl COMMA"/>
+        </action>
+    </actions>
+</idea-plugin>
