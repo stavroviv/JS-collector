@@ -1,9 +1,6 @@
 package main.java;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -343,18 +340,46 @@ public class JsFilesCollector {
         }
     }
 
+    private static String getTargetDirectoryName(String pomPath) throws Exception {
+
+        BufferedReader reader = new BufferedReader(new FileReader(pomPath));
+        String line = reader.readLine();
+
+        int count = 0;
+        while (line != null) {
+
+            int index1 = line.indexOf("<version>");
+            if (count >0 && index1 > 0) {
+
+                int index2 = line.indexOf("</version>");
+
+                index1 = index1 + 9;
+
+                return line.substring(index1, index2).trim();
+            }
+            line = reader.readLine();
+
+            count++;
+        }
+        reader.close();
+
+        throw new Exception("SOMETHING WRONG WITH VERSION");
+    }
+
     public static void main(String basedir) throws Exception {
 
         String[] args = new String[6];
 
 //        String basedir = "/media/user/af816374-1bd4-488d-869d-af76f772ad10/CRM/crm13";
 
+        String targetDirectoryName = "CRM-" + getTargetDirectoryName(basedir + "/pom.xml");
+
         args[0] = basedir + "/src/main/webapp/resources/extjs6-sandbox/app";
-        args[1] = basedir + "/target/CRM-1.0.0-BUILD-SNAPSHOT/resources/extjs6-sandbox/appCollective.js";
+        args[1] = basedir + "/target/" + targetDirectoryName + "/resources/extjs6-sandbox/appCollective.js";
         args[2] = basedir + "/src/main/webapp/resources/admin-dashboard/app";
-        args[3] = basedir + "/target/CRM-1.0.0-BUILD-SNAPSHOT/resources/admin-dashboard/appDashboardCollective.js";
+        args[3] = basedir + "/target/" + targetDirectoryName + "/resources/admin-dashboard/appDashboardCollective.js";
         args[4] = basedir + "/src/main/webapp/resources/CRM/app";
-        args[5] = basedir + "/target/CRM-1.0.0-BUILD-SNAPSHOT/resources/CRM/appCRMCollective.js";
+        args[5] = basedir + "/target/" + targetDirectoryName + "/resources/CRM/appCRMCollective.js";
 
 
 //        Arrays.stream(args).forEach(s -> System.out.println(s));
