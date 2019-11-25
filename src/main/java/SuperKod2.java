@@ -10,6 +10,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.MessageType;
 import com.intellij.openapi.ui.popup.Balloon;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
+import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.wm.IdeFrame;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.ui.awt.RelativePoint;
@@ -45,9 +46,11 @@ public class SuperKod2 extends AnAction {
             if (ifMy == null) {
                 WindowManager.getInstance().suggestParentWindow(project).addWindowFocusListener(new MyWindowFocusListener());
                 message = "auto collection is ON";
+                anActionEvent.getPresentation().setIcon(IconLoader.getIcon("/icons/dog.png"));
             } else {
                 WindowManager.getInstance().suggestParentWindow(project).removeWindowFocusListener(ifMy);
                 message = "auto collection is OFF";
+                anActionEvent.getPresentation().setIcon(IconLoader.getIcon("/icons/dog_disable.png"));
             }
 
             JBPopupFactory.getInstance()
@@ -65,6 +68,7 @@ public class SuperKod2 extends AnAction {
                     .createBalloon()
                     .show(RelativePoint.getSouthEastOf(ideFrame.getComponent()), Balloon.Position.above);
         }
+
     }
 
     @Override
