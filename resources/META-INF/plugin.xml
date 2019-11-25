@@ -17,7 +17,7 @@
 
     <actions>
         <action id="SuperKod2" class="main.java.SuperKod2" text="JS collector AUTO" description="JS collector AUTO"
-                icon="/icons/dog.jpg">
+                icon="/icons/dog.png">
             <add-to-group group-id="ToolbarRunGroup" anchor="after" relative-to-action="Stop"/>
         </action>
         <action id="SuperKod" class="main.java.SuperKod" text="JS collector" description="JS collector"
