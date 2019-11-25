@@ -16,6 +16,10 @@
     </extensions>
 
     <actions>
+        <action id="SuperKod2" class="main.java.SuperKod2" text="JS collector AUTO" description="JS collector AUTO"
+                icon="/icons/dog.jpg">
+            <add-to-group group-id="ToolbarRunGroup" anchor="after" relative-to-action="Stop"/>
+        </action>
         <action id="SuperKod" class="main.java.SuperKod" text="JS collector" description="JS collector"
                 icon="/icons/petshop.png">
             <add-to-group group-id="ToolbarRunGroup" anchor="after" relative-to-action="Stop"/>

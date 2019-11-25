@@ -281,13 +281,13 @@ public class JsFilesCollector {
 
     private static void generateCollectiveFile() throws FileNotFoundException, UnsupportedEncodingException {
 
-        File file = new File(outFile);
-
-        if (file.delete()) {
-            System.out.println("File deleted successfully");
-        } else {
-            System.out.println("Failed to delete the file");
-        }
+//        File file = new File(outFile);
+//
+//        if (file.delete()) {
+//            System.out.println("File deleted successfully");
+//        } else {
+//            System.out.println("Failed to delete the file");
+//        }
 
         writer = new PrintWriter(outFile, "UTF-8");
         writeFile(appName + "Application");
@@ -340,39 +340,11 @@ public class JsFilesCollector {
         }
     }
 
-    private static String getTargetDirectoryName(String pomPath) throws Exception {
-
-        BufferedReader reader = new BufferedReader(new FileReader(pomPath));
-        String line = reader.readLine();
-
-        int count = 0;
-        while (line != null) {
-
-            int index1 = line.indexOf("<version>");
-            if (count >0 && index1 > 0) {
-
-                int index2 = line.indexOf("</version>");
-
-                index1 = index1 + 9;
-
-                return line.substring(index1, index2).trim();
-            }
-            line = reader.readLine();
-
-            count++;
-        }
-        reader.close();
-
-        throw new Exception("SOMETHING WRONG WITH VERSION");
-    }
-
-    public static void main(String basedir) throws Exception {
+    public static void main(String basedir, String targetDirectoryName) throws Exception {
 
         String[] args = new String[6];
 
 //        String basedir = "/media/user/af816374-1bd4-488d-869d-af76f772ad10/CRM/crm13";
-
-        String targetDirectoryName = "CRM-" + getTargetDirectoryName(basedir + "/pom.xml");
 
         args[0] = basedir + "/src/main/webapp/resources/extjs6-sandbox/app";
         args[1] = basedir + "/target/" + targetDirectoryName + "/resources/extjs6-sandbox/appCollective.js";
