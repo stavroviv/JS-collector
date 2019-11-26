@@ -46,11 +46,11 @@ public class SuperKod2 extends AnAction {
             if (ifMy == null) {
                 WindowManager.getInstance().suggestParentWindow(project).addWindowFocusListener(new MyWindowFocusListener());
                 message = "auto collection is ON";
-                anActionEvent.getPresentation().setIcon(IconLoader.getIcon("/icons/dog.png"));
+                anActionEvent.getPresentation().setIcon(IconLoader.getIcon("/icons/sencha_color_smal.png"));
             } else {
                 WindowManager.getInstance().suggestParentWindow(project).removeWindowFocusListener(ifMy);
                 message = "auto collection is OFF";
-                anActionEvent.getPresentation().setIcon(IconLoader.getIcon("/icons/dog_disable.png"));
+                anActionEvent.getPresentation().setIcon(IconLoader.getIcon("/icons/sencha_gray_smal.png"));
             }
 
             JBPopupFactory.getInstance()

@@ -16,12 +16,12 @@
     </extensions>
 
     <actions>
-        <action id="SuperKod2" class="main.java.SuperKod2" text="JS collector AUTO" description="JS collector AUTO"
-                icon="/icons/dog_disable.png">
+        <action id="SuperKod2" class="main.java.SuperKod2" text="Вкл/Выкл автоматической сборки" description="Вкл/Выкл автоматической сборки"
+                icon="/icons/sencha_color_smal.png">
             <add-to-group group-id="ToolbarRunGroup" anchor="after" relative-to-action="Stop"/>
         </action>
-        <action id="SuperKod" class="main.java.SuperKod" text="JS collector" description="JS collector"
-                icon="/icons/petshop.png">
+        <action id="SuperKod" class="main.java.SuperKod" text="Собрать" description="Собрать"
+                icon="/icons/sencha-small.png">
             <add-to-group group-id="ToolbarRunGroup" anchor="after" relative-to-action="Stop"/>
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl COMMA"/>
         </action>
