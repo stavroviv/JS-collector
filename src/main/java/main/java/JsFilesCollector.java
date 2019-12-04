@@ -60,7 +60,7 @@ class ExtJSFile {
             int columnStart = afterRequires.indexOf(":");
 
             if (columnStart < 0) {
-                throw new Exception("[JsFilesCollector] ERROR: missing character ':'");
+                throw new Exception("[main.java.JsFilesCollector] ERROR: missing character ':'");
             }
 
             String afterColumn = afterRequires.substring(columnStart + 1);
@@ -68,7 +68,7 @@ class ExtJSFile {
             int openBreakStart = afterColumn.indexOf("[");
 
             if (openBreakStart < 0) {
-                throw new Exception("[JsFilesCollector] ERROR: missing character '['");
+                throw new Exception("[main.java.JsFilesCollector] ERROR: missing character '['");
             }
 
             String afterOpenBreak = afterColumn.substring(openBreakStart + 1);
@@ -76,7 +76,7 @@ class ExtJSFile {
             int closeBreakStart = afterOpenBreak.indexOf("]");
 
             if (closeBreakStart < 0) {
-                throw new Exception("[JsFilesCollector] ERROR: missing character ']'");
+                throw new Exception("[main.java.JsFilesCollector] ERROR: missing character ']'");
             }
 
             String afterCloseBreak = afterOpenBreak.substring(closeBreakStart + 1);
@@ -115,7 +115,7 @@ class ExtJSFile {
             int columnStart = afterExtend.indexOf(":");
 
             if (columnStart < 0) {
-                throw new Exception("[JsFilesCollector] ERROR: missing character ':'");
+                throw new Exception("[main.java.JsFilesCollector] ERROR: missing character ':'");
             }
 
             String afterColumn = afterExtend.substring(columnStart + 1);
@@ -123,7 +123,7 @@ class ExtJSFile {
             int commaStart = afterColumn.indexOf(",");
 
             if (commaStart < 0) {
-                throw new Exception("[JsFilesCollector] ERROR: missing character ','");
+                throw new Exception("[main.java.JsFilesCollector] ERROR: missing character ','");
             }
 
             extended = afterColumn.substring(0, commaStart);
@@ -134,10 +134,10 @@ class ExtJSFile {
             if (!extended.substring(0, 3).equals("CRM")) {
                 extended = "";
             } else {
-                //System.out.println("[JsFilesCollector] Find extended: [" + extended + "] for [" +  name + "]");
+                //System.out.println("[main.java.JsFilesCollector] Find extended: [" + extended + "] for [" +  name + "]");
             }
         } else {
-            //System.out.println("[JsFilesCollector] No extended: [" +  name + "]");
+            //System.out.println("[main.java.JsFilesCollector] No extended: [" +  name + "]");
         }
     }
 
@@ -182,7 +182,7 @@ class ExtJSFile {
 
                 if (!str.equals("")) {
                     requiresList.add(str);
-                    //System.out.println("[JsFilesCollector] Find requires: [" + str + "] for [" +  name + "]");
+                    //System.out.println("[main.java.JsFilesCollector] Find requires: [" + str + "] for [" +  name + "]");
                 }
             }
         }
@@ -208,7 +208,7 @@ class ExtJSFile {
 
 public class JsFilesCollector {
 
-    static PrintWriter writer;
+    static StringBuilder sb;
     static String root;
     static String outFile;
     static Integer fileCount;
@@ -248,68 +248,90 @@ public class JsFilesCollector {
         if (useSandboxData) {
             addSandboxFiles(baseDir);
         }
-        //System.out.println("[JsFilesCollector] Total number of files " + fileCount);
+        //System.out.println("[main.java.JsFilesCollector] Total number of files " + fileCount);
     }
 
     private static void writeFile(String fileName) {
 
         ExtJSFile extJSFile = fileMap.get(fileName);
 
-        //System.out.println("[JsFilesCollector] Write file: [" + fileName + "]");
+        //System.out.println("[main.java.JsFilesCollector] Write file: [" + fileName + "]");
 
         if (extJSFile != null) {
 
             if (!extJSFile.extended.equals("")) {
-                //System.out.println("[JsFilesCollector] Would write extended file: " + extJSFile.extended);
+                //System.out.println("[main.java.JsFilesCollector] Would write extended file: " + extJSFile.extended);
                 writeFile(extJSFile.extended);
             }
 
             for (String key : extJSFile.requiresList) {
-                //System.out.println("[JsFilesCollector] Would write requires file: " + key);
+                //System.out.println("[main.java.JsFilesCollector] Would write requires file: " + key);
                 writeFile(key);
             }
 
             if (!extJSFile.alreadyWritten) {
-                writer.println(extJSFile.contentWithoutRequires);
+                sb.append(extJSFile.contentWithoutRequires).append("\n");
                 extJSFile.alreadyWritten = true;
             }
 
         } else {
-            //System.out.println("[JsFilesCollector] No file for requires: " + fileName);
+            //System.out.println("[main.java.JsFilesCollector] No file for requires: " + fileName);
         }
     }
 
-    private static void generateCollectiveFile() throws FileNotFoundException, UnsupportedEncodingException {
+    private static StringBuilder getStringBuilderByFile(String filePath) {
 
-//        File file = new File(outFile);
-//
-//        if (file.delete()) {
-//            System.out.println("File deleted successfully");
-//        } else {
-//            System.out.println("Failed to delete the file");
-//        }
+        File tempFile = new File(filePath);
+        boolean exists = tempFile.exists();
 
-        writer = new PrintWriter(outFile, "UTF-8");
-        writeFile(appName + "Application");
-        writer.close();
-    }
+        if (!exists) {
+            return new StringBuilder("-1");
+        }
 
-    private static void lookForUnusedFiles() {
+        try {
 
-        int count = 0;
-        for (String key : fileMap.keySet()) {
+            StringBuilder contentBuilder = new StringBuilder();
 
-            ExtJSFile extJSFile = fileMap.get(key);
+            BufferedReader br = new BufferedReader(new FileReader(tempFile));
 
-            if (!extJSFile.alreadyWritten) {
-                //System.out.println("[JsFilesCollector] Unused file: " + key);
-                count++;
+            String st;
+            while ((st = br.readLine()) != null) {
+                contentBuilder.append(st).append("\n");
             }
+
+            return contentBuilder;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new StringBuilder("-1");
         }
-        //System.out.println("[JsFilesCollector] Total number of unused file: " + count);
     }
 
-    private static void utilRun(String rootParam, String outFileParam, String basedir) throws Exception {
+    private static boolean generateCollectiveFile() throws FileNotFoundException, UnsupportedEncodingException {
+
+        sb = new StringBuilder("");
+        writeFile(appName + "Application");
+
+        StringBuilder sbOld = getStringBuilderByFile(outFile);
+
+        int hash1 = sb.toString().hashCode();
+        int hash2 = sbOld.toString().hashCode();
+
+//        System.out.println("new " + hash1);
+//        System.out.println("old " + hash2);
+
+        boolean bool = (hash1 == hash2);
+
+        if (!bool) {
+            PrintWriter writer = new PrintWriter(outFile, "UTF-8");
+            writer.print(sb.toString());
+            writer.close();
+        }
+
+        return bool;
+    }
+
+    private static boolean utilRun(String rootParam, String outFileParam, String basedir) throws Exception {
 
         root = rootParam;
         outFile = outFileParam;
@@ -317,10 +339,8 @@ public class JsFilesCollector {
         fileCount = 0;
         appName = getAppName();
 
-
         iterateOverAllFiles(basedir);
-        generateCollectiveFile();
-        lookForUnusedFiles();
+        return generateCollectiveFile();
     }
 
     private static String getAppName() throws Exception {
@@ -336,11 +356,11 @@ public class JsFilesCollector {
             useSandboxData = false;
             return "AdminDashboard.";
         } else {
-            throw new Exception("[JsFilesCollector] ERROR: WRONG ROOT. NO APPLICATION NAME DEFINED.");
+            throw new Exception("[main.java.JsFilesCollector] ERROR: WRONG ROOT. NO APPLICATION NAME DEFINED.");
         }
     }
 
-    public static void main(String basedir, String targetDirectoryName) throws Exception {
+    public static boolean main(String basedir, String targetDirectoryName) throws Exception {
 
         String[] args = new String[6];
 
@@ -357,19 +377,22 @@ public class JsFilesCollector {
 //        Arrays.stream(args).forEach(s -> System.out.println(s));
 
         if (args.length != 6) {
-            throw new Exception("[JsFilesCollector] ERROR: WRONG PARAMETERS");
+            throw new Exception("[main.java.JsFilesCollector] ERROR: WRONG PARAMETERS");
         }
 
         Date start = new Date();
 
-        //System.out.println("[JsFilesCollector] START COLLECT OLD EXT6");
-        utilRun(args[0], args[1], basedir);
-        //System.out.println("[JsFilesCollector] START COLLECT DASHBOARD");
-        utilRun(args[2], args[3], basedir);
-        //System.out.println("[JsFilesCollector] START COLLECT NEW EXT6");
-        utilRun(args[4], args[5], basedir);
+        //System.out.println("[main.java.JsFilesCollector] START COLLECT OLD EXT6");
+        boolean bool1 = utilRun(args[0], args[1], basedir);
+        //System.out.println("[main.java.JsFilesCollector] START COLLECT DASHBOARD");
+        boolean bool2 = utilRun(args[2], args[3], basedir);
+        //System.out.println("[main.java.JsFilesCollector] START COLLECT NEW EXT6");
+        boolean bool3 = utilRun(args[4], args[5], basedir);
         Date finish = new Date();
-        //System.out.println("[JsFilesCollector] Execution time: " + (finish.getTime() - start.getTime()) + " ms");
+        //System.out.println("[main.java.JsFilesCollector] Execution time: " + (finish.getTime() - start.getTime()) + " ms");
+
+        return (bool1 && bool2 && bool3);
+//        return bool1;
     }
 
 }

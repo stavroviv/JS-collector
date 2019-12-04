@@ -1,0 +1,36 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.intellij' version '0.4.14'
+    id 'war'
+}
+
+group 'JS-collector'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+    // https://mvnrepository.com/artifact/org.eclipse.jetty.websocket/websocket-api
+    compile group: 'org.eclipse.jetty.websocket', name: 'websocket-api', version: '9.4.24.v20191120'
+    // https://mvnrepository.com/artifact/org.eclipse.jetty.websocket/websocket-server
+    compile group: 'org.eclipse.jetty.websocket', name: 'websocket-server', version: '9.4.24.v20191120'
+    // https://mvnrepository.com/artifact/org.eclipse.jetty.websocket/websocket-client
+    compile group: 'org.eclipse.jetty.websocket', name: 'websocket-client', version: '9.4.24.v20191120'
+}
+
+// See https://github.com/JetBrains/gradle-intellij-plugin/
+intellij {
+    version 'IU-2019.2.4'
+}
+patchPluginXml {
+    changeNotes """
+      Add change notes here.<br>
+      <em>most HTML tags may be used</em>"""
+}

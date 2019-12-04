@@ -1,10 +1,7 @@
 package main.java;
 
 import com.intellij.ide.DataManager;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DataConstants;
-import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.MessageType;
@@ -25,13 +22,20 @@ import java.io.StringWriter;
 
 class MyWindowFocusListener implements WindowFocusListener {
 
+    private AnActionEvent anActionEvent;
+
+    public MyWindowFocusListener(AnActionEvent anActionEvent) {
+        super();
+        this.anActionEvent = anActionEvent;
+    }
+
     @Override
     public void windowGainedFocus(WindowEvent e) {
     }
 
     @Override
     public void windowLostFocus(WindowEvent e) {
-        SuperKod.execute();
+        SuperKod.execute(anActionEvent);
     }
 }
 
@@ -41,13 +45,11 @@ class WrongApplicationException extends Exception { }
 
 public class SuperKod extends AnAction {
 
-//    static {
-//
-//        DataContext dataContext = DataManager.getInstance().getDataContext();
-//        Project project = (Project) dataContext.getData(DataConstants.PROJECT);
-//
-//        WindowManager.getInstance().suggestParentWindow(project).addWindowFocusListener(new MyWindowFocusListener());
-//    }
+    static {
+        new Thread(() -> {
+            EventServer.main(null);
+        }).start();
+    }
 
     private static String getTargetDirectoryName(String pomPath) throws WrongApplicationException {
 
@@ -93,7 +95,16 @@ public class SuperKod extends AnAction {
         }
     }
 
-    public static void execute() {
+    public static void showMessage(IdeFrame ideFrame, String message, MessageType messageType) {
+
+        JBPopupFactory.getInstance()
+                .createHtmlTextBalloonBuilder(message, messageType, null)
+                .setFadeoutTime(10_000)
+                .createBalloon()
+                .show(RelativePoint.getSouthOf(ideFrame.getStatusBar().getComponent()), Balloon.Position.above);
+    }
+
+    public static void execute(AnActionEvent e) {
 
         DataContext dataContext = DataManager.getInstance().getDataContext();
         Project project = (Project) dataContext.getData(DataConstants.PROJECT);
@@ -107,35 +118,34 @@ public class SuperKod extends AnAction {
 
             String targetDirectoryName = "CRM-" + getTargetDirectoryName(basedir + "/pom.xml");
 
-            JsFilesCollector.main(basedir, targetDirectoryName);
+            boolean fileChanges = JsFilesCollector.main(basedir, targetDirectoryName);
 
-            JBPopupFactory.getInstance()
-                    .createHtmlTextBalloonBuilder("JS files collected successfully", MessageType.INFO, null)
-                    .setFadeoutTime(15000)
-                    .createBalloon()
-                    .show(RelativePoint.getSouthEastOf(ideFrame.getComponent()), Balloon.Position.above);
+            if (fileChanges) {
+                showMessage(ideFrame, "Файлы собраны.", MessageType.INFO);
+            } else {
+
+                showMessage(ideFrame, "Файлы собраны. ЕСТЬ Изменения.", MessageType.INFO);
+
+                if (SuperKod3.isStatus()) {
+                    AnAction action = ActionManager.getInstance().getAction("JavaScript.Debugger.ReloadInBrowser");
+                    action.actionPerformed(e);
+                }
+            }
 
         } catch (WrongApplicationException ex) {
 
-            JBPopupFactory.getInstance()
-                    .createHtmlTextBalloonBuilder("Wrong Application!", MessageType.ERROR, null)
-                    .setFadeoutTime(15000)
-                    .createBalloon()
-                    .show(RelativePoint.getSouthEastOf(ideFrame.getComponent()), Balloon.Position.above);
+            showMessage(ideFrame, "Не то приложение!", MessageType.ERROR);
 
         } catch (Exception ex) {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-            JBPopupFactory.getInstance()
-                    .createHtmlTextBalloonBuilder(errors.toString(), MessageType.ERROR, null)
-                    .setFadeoutTime(15000)
-                    .createBalloon()
-                    .show(RelativePoint.getSouthEastOf(ideFrame.getComponent()), Balloon.Position.above);
+
+            showMessage(ideFrame, errors.toString(), MessageType.ERROR);
         }
     }
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        execute();
+        execute(e);
     }
 }
