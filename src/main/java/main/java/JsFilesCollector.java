@@ -307,9 +307,28 @@ public class JsFilesCollector {
         }
     }
 
-    private static boolean generateCollectiveFile() throws FileNotFoundException, UnsupportedEncodingException {
+    private static boolean generateCollectiveFile(Boolean addReloadScript) throws FileNotFoundException, UnsupportedEncodingException {
+
+        String reloadScript = "function connect() {\n" +
+                "\n" +
+                "\tconsole.log('connect');\n" +
+                "\n" +
+                "\tvar ws = new WebSocket(\"ws://localhost:12345/events/\");\n" +
+                "\tws.onmessage = function(event) {                   \n" +
+                "\n" +
+                "\t\tconsole.log('message');\t\n" +
+                "\n" +
+                "\t\twindow.location.reload(true);\n" +
+                "\t};\n" +
+                "}\n" +
+                "connect();\n";
 
         sb = new StringBuilder("");
+
+        if (addReloadScript) {
+            sb.append(reloadScript);
+        }
+
         writeFile(appName + "Application");
 
         StringBuilder sbOld = getStringBuilderByFile(outFile);
@@ -331,7 +350,7 @@ public class JsFilesCollector {
         return bool;
     }
 
-    private static boolean utilRun(String rootParam, String outFileParam, String basedir) throws Exception {
+    private static boolean utilRun(String rootParam, String outFileParam, String basedir, Boolean addReloadScript) throws Exception {
 
         root = rootParam;
         outFile = outFileParam;
@@ -340,7 +359,7 @@ public class JsFilesCollector {
         appName = getAppName();
 
         iterateOverAllFiles(basedir);
-        return generateCollectiveFile();
+        return generateCollectiveFile(addReloadScript);
     }
 
     private static String getAppName() throws Exception {
@@ -383,11 +402,11 @@ public class JsFilesCollector {
         Date start = new Date();
 
         //System.out.println("[main.java.JsFilesCollector] START COLLECT OLD EXT6");
-        boolean bool1 = utilRun(args[0], args[1], basedir);
+        boolean bool1 = utilRun(args[0], args[1], basedir, true);
         //System.out.println("[main.java.JsFilesCollector] START COLLECT DASHBOARD");
-        boolean bool2 = utilRun(args[2], args[3], basedir);
+        boolean bool2 = utilRun(args[2], args[3], basedir, false);
         //System.out.println("[main.java.JsFilesCollector] START COLLECT NEW EXT6");
-        boolean bool3 = utilRun(args[4], args[5], basedir);
+        boolean bool3 = utilRun(args[4], args[5], basedir, false);
         Date finish = new Date();
         //System.out.println("[main.java.JsFilesCollector] Execution time: " + (finish.getTime() - start.getTime()) + " ms");
 

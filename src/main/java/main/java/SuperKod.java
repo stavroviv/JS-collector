@@ -10,14 +10,14 @@ import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.wm.IdeFrame;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.ui.awt.RelativePoint;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.DefaultHandler;
+import org.eclipse.jetty.websocket.api.Session;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 
 
 class MyWindowFocusListener implements WindowFocusListener {
@@ -45,10 +45,33 @@ class WrongApplicationException extends Exception { }
 
 public class SuperKod extends AnAction {
 
+    static ChatWebSocketHandler chatWebSocketHandler;
+
     static {
-        new Thread(() -> {
-            EventServer.main(null);
-        }).start();
+//        new Thread(() -> {
+//            EventServer.main(null);
+//        }).start();
+
+        try {
+            // Создание сервера Jetty на 8081 порту
+            Server server = new Server(12345);
+
+            // Регистрируем ChatWebSocketHandler в сервере Jetty
+            chatWebSocketHandler = new ChatWebSocketHandler();
+            // Это вариант хэндлера для WebSocketHandlerContainer
+            chatWebSocketHandler.setHandler(new DefaultHandler());
+
+            // Вставляем наш хэндлер слушаться jetty
+            server.setHandler(chatWebSocketHandler);
+
+
+//            server.getSessionIdManager().getId()
+
+            // Запускаем Jetty
+            server.start();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
     private static String getTargetDirectoryName(String pomPath) throws WrongApplicationException {
@@ -101,7 +124,7 @@ public class SuperKod extends AnAction {
                 .createHtmlTextBalloonBuilder(message, messageType, null)
                 .setFadeoutTime(10_000)
                 .createBalloon()
-                .show(RelativePoint.getSouthOf(ideFrame.getStatusBar().getComponent()), Balloon.Position.above);
+                .show(RelativePoint.getCenterOf(ideFrame.getStatusBar().getComponent()), Balloon.Position.above);
     }
 
     public static void execute(AnActionEvent e) {
@@ -127,8 +150,14 @@ public class SuperKod extends AnAction {
                 showMessage(ideFrame, "Файлы собраны. ЕСТЬ Изменения.", MessageType.INFO);
 
                 if (SuperKod3.isStatus()) {
-                    AnAction action = ActionManager.getInstance().getAction("JavaScript.Debugger.ReloadInBrowser");
-                    action.actionPerformed(e);
+
+                    for (Session s : MySocket.ss) {
+                        try {
+                            s.getRemote().sendString("RELOAD");
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
                 }
             }
 
