@@ -20,11 +20,11 @@
                 icon="/icons/chrome2_small_grey.png">
             <add-to-group group-id="ToolbarRunGroup" anchor="after" relative-to-action="Stop"/>
         </action>
-        <action id="main.java.SuperKod2" class="main.java.SuperKod2" text="Вкл/Выкл автоматической сборки" description="Вкл/Выкл автоматической сборки"
+        <action id="main.java.ExtCollectorAuto" class="main.java.ExtCollectorAuto" text="Вкл/Выкл автоматической сборки" description="Вкл/Выкл автоматической сборки"
                 icon="/icons/sencha_gray_smal.png">
             <add-to-group group-id="ToolbarRunGroup" anchor="after" relative-to-action="Stop"/>
         </action>
-        <action id="main.java.SuperKod" class="main.java.SuperKod" text="Собрать" description="Собрать"
+        <action id="main.java.ExtCollector" class="main.java.ExtCollector" text="Собрать" description="Собрать"
                 icon="/icons/sencha-small.png">
             <add-to-group group-id="ToolbarRunGroup" anchor="after" relative-to-action="Stop"/>
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl COMMA"/>
