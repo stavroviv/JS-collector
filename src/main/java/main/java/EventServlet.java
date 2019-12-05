@@ -6,13 +6,11 @@ import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
 import javax.servlet.annotation.WebServlet;
 
-
-@WebServlet(name = "Example WebSocket Servlet", urlPatterns = { "/example-websocket "})
-public class EventServlet extends WebSocketServlet
-{
+@Deprecated
+@WebServlet(name = "Example WebSocket Servlet", urlPatterns = {"/example-websocket "})
+public class EventServlet extends WebSocketServlet {
     @Override
-    public void configure(WebSocketServletFactory factory)
-    {
+    public void configure(WebSocketServletFactory factory) {
         factory.register(EventSocket.class);
     }
 }

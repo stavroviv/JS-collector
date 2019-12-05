@@ -17,7 +17,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 
-public class SuperKod2 extends AnAction {
+public class ExtCollectorAuto extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
@@ -32,7 +32,7 @@ public class SuperKod2 extends AnAction {
 
             WindowFocusListener ifMy = null;
             for (WindowFocusListener focusListener : focusListeners) {
-                if (focusListener instanceof MyWindowFocusListener) {
+                if (focusListener instanceof CustomWindowFocusListener) {
                     ifMy = focusListener;
                     break;
                 }
@@ -40,7 +40,7 @@ public class SuperKod2 extends AnAction {
 
             String message;
             if (ifMy == null) {
-                WindowManager.getInstance().suggestParentWindow(project).addWindowFocusListener(new MyWindowFocusListener(anActionEvent));
+                WindowManager.getInstance().suggestParentWindow(project).addWindowFocusListener(new CustomWindowFocusListener(anActionEvent));
                 message = "Автосборка ВКЛЮЧЕНА";
                 anActionEvent.getPresentation().setIcon(IconLoader.getIcon("/icons/sencha_color_smal.png"));
             } else {
@@ -48,19 +48,16 @@ public class SuperKod2 extends AnAction {
                 message = "Автосборка ВЫКЛЮЧЕНА";
                 anActionEvent.getPresentation().setIcon(IconLoader.getIcon("/icons/sencha_gray_smal.png"));
             }
-
-            SuperKod.showMessage(ideFrame, message, MessageType.INFO);
-
+            ExtCollector.showMessage(ideFrame, message, MessageType.INFO);
         } catch (Exception ex) {
             StringWriter errors = new StringWriter();
             ex.printStackTrace(new PrintWriter(errors));
-
-            SuperKod.showMessage(ideFrame, errors.toString(), MessageType.ERROR);
+            ExtCollector.showMessage(ideFrame, errors.toString(), MessageType.ERROR);
         }
     }
 
-    @Override
-    public boolean isDumbAware() {
-        return false;
-    }
+//    @Override
+//    public boolean isDumbAware() {
+//        return false;
+//    }
 }

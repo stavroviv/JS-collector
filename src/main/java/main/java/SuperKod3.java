@@ -9,7 +9,7 @@ import com.intellij.openapi.wm.IdeFrame;
 import com.intellij.openapi.wm.WindowManager;
 import org.jetbrains.annotations.NotNull;
 
-
+@Deprecated
 public class SuperKod3 extends AnAction {
 
     private static boolean status = false;
@@ -44,6 +44,6 @@ public class SuperKod3 extends AnAction {
             message = "Автообновление браузера ВЫКЛЮЧЕНА";
             System.out.println("off");
         }
-        SuperKod.showMessage(ideFrame, message, MessageType.INFO);
+        ExtCollector.showMessage(ideFrame, message, MessageType.INFO);
     }
 }
