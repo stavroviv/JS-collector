@@ -16,7 +16,7 @@
     </extensions>
 
     <actions>
-        <action id="main.java.SuperKod3" class="main.java.SuperKod3" text="Вкл/Выкл автообновления браузера" description="Вкл/Выкл автообновления браузера"
+        <action id="main.java.ChromeUpdate" class="main.java.ChromeUpdate" text="Вкл/Выкл автообновления браузера" description="Вкл/Выкл автообновления браузера"
                 icon="/icons/chrome2_small_grey.png">
             <add-to-group group-id="ToolbarRunGroup" anchor="after" relative-to-action="Stop"/>
         </action>

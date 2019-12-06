@@ -21,15 +21,14 @@ public class ExtCollectorAuto extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
-
         DataContext dataContext = DataManager.getInstance().getDataContext();
         Project project = (Project) dataContext.getData(DataConstants.PROJECT);
         IdeFrame ideFrame = WindowManager.getInstance().getIdeFrame(project);
 
         try {
 
-            WindowFocusListener[] focusListeners = WindowManager.getInstance().suggestParentWindow(project).getWindowFocusListeners();
-
+            WindowFocusListener[] focusListeners =
+                    WindowManager.getInstance().suggestParentWindow(project).getWindowFocusListeners();
             WindowFocusListener ifMy = null;
             for (WindowFocusListener focusListener : focusListeners) {
                 if (focusListener instanceof CustomWindowFocusListener) {
@@ -40,7 +39,9 @@ public class ExtCollectorAuto extends AnAction {
 
             String message;
             if (ifMy == null) {
-                WindowManager.getInstance().suggestParentWindow(project).addWindowFocusListener(new CustomWindowFocusListener(anActionEvent));
+                WindowManager.getInstance().suggestParentWindow(project).addWindowFocusListener(
+                        new CustomWindowFocusListener(anActionEvent)
+                );
                 message = "Автосборка ВКЛЮЧЕНА";
                 anActionEvent.getPresentation().setIcon(IconLoader.getIcon("/icons/sencha_color_smal.png"));
             } else {
@@ -55,9 +56,4 @@ public class ExtCollectorAuto extends AnAction {
             ExtCollector.showMessage(ideFrame, errors.toString(), MessageType.ERROR);
         }
     }
-
-//    @Override
-//    public boolean isDumbAware() {
-//        return false;
-//    }
 }

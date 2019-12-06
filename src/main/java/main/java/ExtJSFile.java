@@ -11,9 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 class ExtJSFile {
-
-    static Charset charset = StandardCharsets.UTF_8;
-
     String name;
     String path;
     String allContent;
@@ -52,7 +49,7 @@ class ExtJSFile {
     private static String getAllContent(File file) {
         try {
             byte[] encoded = Files.readAllBytes(Paths.get(file.getPath()));
-            return new String(encoded, charset);
+            return new String(encoded, StandardCharsets.UTF_8);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -111,7 +108,9 @@ class ExtJSFile {
         }
 
         if (JsFilesCollector.useSandboxData) {
-            contentWithoutRequires = contentWithoutRequires.replaceAll("getExt3WindowFromExt6Window", "DESKTOP.applyWindowToDesktop");
+            contentWithoutRequires = contentWithoutRequires.replaceAll(
+                    "getExt3WindowFromExt6Window", "DESKTOP.applyWindowToDesktop"
+            );
         }
     }
 

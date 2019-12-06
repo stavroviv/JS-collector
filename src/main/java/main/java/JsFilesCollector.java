@@ -4,6 +4,8 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import static main.java.Constants.JETTY_PORT;
+
 public class JsFilesCollector {
 
     static StringBuilder sb;
@@ -82,21 +84,15 @@ public class JsFilesCollector {
         }
     }
 
-    private static boolean generateCollectiveFile(Boolean addReloadScript) throws FileNotFoundException, UnsupportedEncodingException {
-
-        String reloadScript =
-                "function connect() {\n" +
-                        "\n" +
-                        "\tconsole.log('connect');\n" +
-                        "\n" +
-                        "\tvar ws = new WebSocket(\"ws://localhost:12345/events/\");\n" +
+    private static boolean generateCollectiveFile(Boolean addReloadScript)
+            throws FileNotFoundException, UnsupportedEncodingException {
+        String reloadScript = "function connect() {\n" +
+                        "\tvar ws = new WebSocket(\"ws://localhost:" + JETTY_PORT + "/events/\");\n" +
                         "\tws.onmessage = function(event) {                   \n" +
-                        "\n" +
-                        "\t\tconsole.log('message');\t\n" +
-                        "\n" +
                         "\t\twindow.location.reload(true);\n" +
                         "\t};\n" +
                         "}\n" +
+                        "\n" +
                         "connect();\n";
 
         sb = new StringBuilder();
@@ -123,7 +119,8 @@ public class JsFilesCollector {
         return bool;
     }
 
-    private static boolean utilRun(String rootParam, String outFileParam, String basedir, Boolean addReloadScript) throws Exception {
+    private static boolean utilRun(String rootParam, String outFileParam,
+                                   String basedir, Boolean addReloadScript) throws Exception {
         root = rootParam;
         outFile = outFileParam;
         fileMap.clear();
@@ -159,7 +156,7 @@ public class JsFilesCollector {
         args[3] = basedir + "/target/" + targetDirectoryName + "/resources/admin-dashboard/appDashboardCollective.js";
         args[4] = basedir + "/src/main/webapp/resources/CRM/app";
         args[5] = basedir + "/target/" + targetDirectoryName + "/resources/CRM/appCRMCollective.js";
-       
+
         return (utilRun(args[0], args[1], basedir, true)
                 && utilRun(args[2], args[3], basedir, false)
                 && utilRun(args[4], args[5], basedir, false));

@@ -20,6 +20,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 
+import static main.java.Constants.JETTY_PORT;
+
 
 public class ExtCollector extends AnAction {
 
@@ -27,7 +29,7 @@ public class ExtCollector extends AnAction {
 
     static {
         try {
-            Server server = new Server(12345);
+            Server server = new Server(JETTY_PORT);
             chatWebSocketHandler = new CustomSocketHandler();
             chatWebSocketHandler.setHandler(new DefaultHandler());
             server.setHandler(chatWebSocketHandler);
@@ -94,7 +96,7 @@ public class ExtCollector extends AnAction {
                 showMessage(ideFrame, "Файлы собраны.", MessageType.INFO);
             } else {
                 showMessage(ideFrame, "Файлы собраны. ЕСТЬ Изменения.", MessageType.INFO);
-                if (SuperKod3.isStatus()) {
+                if (ChromeUpdate.isStatus()) {
                     for (Session s : CustomSocket.sessions) {
                         try {
                             s.getRemote().sendString("RELOAD");
