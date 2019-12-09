@@ -121,6 +121,8 @@ public class JsFilesCollector {
         int hash1 = sb.toString().hashCode();
         int hash2 = sbOld.toString().hashCode();
 
+        System.out.println(hash1 + " " + hash2);
+
         boolean bool = (hash1 == hash2);
 
         if (!bool) {
@@ -171,8 +173,8 @@ public class JsFilesCollector {
         args[5] = basedir + "/target/" + targetDirectoryName + "/resources/CRM/appCRMCollective.js";
 
         return (utilRun(args[0], args[1], basedir, true)
-                && utilRun(args[2], args[3], basedir, false)
-                && utilRun(args[4], args[5], basedir, false));
+                & utilRun(args[2], args[3], basedir, false)
+                & utilRun(args[4], args[5], basedir, false));
     }
 
 }
