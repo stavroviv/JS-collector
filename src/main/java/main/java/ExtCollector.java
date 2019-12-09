@@ -34,8 +34,27 @@ public class ExtCollector extends AnAction {
             chatWebSocketHandler.setHandler(new DefaultHandler());
             server.setHandler(chatWebSocketHandler);
             server.start();
-        } catch (Throwable e) {
-            e.printStackTrace();
+
+            System.out.println("server start on port: " + JETTY_PORT);
+
+        } catch (Exception e) {
+
+            try {
+
+                Server server = new Server(0);
+
+                chatWebSocketHandler = new CustomSocketHandler();
+                chatWebSocketHandler.setHandler(new DefaultHandler());
+                server.setHandler(chatWebSocketHandler);
+                server.start();
+
+                JETTY_PORT = server.getURI().getPort();
+                System.out.println("server start on random port: " + JETTY_PORT);
+
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+
         }
     }
 
@@ -93,7 +112,7 @@ public class ExtCollector extends AnAction {
             boolean fileChanges = JsFilesCollector.runCollector(basedir, targetDirectoryName);
 
             if (fileChanges) {
-                showMessage(ideFrame, "Файлы собраны.", MessageType.INFO);
+                showMessage(ideFrame, "Изменений НЕТ.", MessageType.INFO);
             } else {
                 showMessage(ideFrame, "Файлы собраны. ЕСТЬ Изменения.", MessageType.INFO);
                 if (ChromeUpdate.isStatus()) {

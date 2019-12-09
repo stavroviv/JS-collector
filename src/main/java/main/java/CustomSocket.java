@@ -3,6 +3,7 @@ package main.java;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 
 import java.util.ArrayList;
@@ -24,4 +25,11 @@ public class CustomSocket {
        sessions.remove(this.session);
     }
 
+    @OnWebSocketMessage
+    public void onText(Session session, String message) {
+        //System.out.printf("IN");
+        if (session.isOpen()) {
+            System.out.printf(message);
+        }
+    }
 }

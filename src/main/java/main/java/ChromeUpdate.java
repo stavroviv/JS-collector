@@ -9,7 +9,7 @@ import com.intellij.openapi.wm.IdeFrame;
 import com.intellij.openapi.wm.WindowManager;
 import org.jetbrains.annotations.NotNull;
 
-@Deprecated
+
 public class ChromeUpdate extends AnAction {
 
     private static boolean status = false;

@@ -86,14 +86,27 @@ public class JsFilesCollector {
 
     private static boolean generateCollectiveFile(Boolean addReloadScript)
             throws FileNotFoundException, UnsupportedEncodingException {
-        String reloadScript = "function connect() {\n" +
-                        "\tvar ws = new WebSocket(\"ws://localhost:" + JETTY_PORT + "/events/\");\n" +
-                        "\tws.onmessage = function(event) {                   \n" +
-                        "\t\twindow.location.reload(true);\n" +
-                        "\t};\n" +
-                        "}\n" +
-                        "\n" +
-                        "connect();\n";
+        String reloadScript = "function webSocketStart() {\n" +
+                "\n" +
+                "\tvar ws = new WebSocket(\"ws://localhost:" + JETTY_PORT + "/events/\");\n" +
+                "\n" +
+                "\tws.onmessage = function(event) {                   \n" +
+                "\t\twindow.location.reload(true);\n" +
+                "\t};\n" +
+                "\n" +
+                "\tsetInterval(function() { \n" +
+                "\n" +
+                "\t\ttry {\n" +
+                "\t\t\t//console.log('something');\n" +
+                "\t\t\tws.send('something');\n" +
+                "\t\t} catch(err) { \n" +
+                "\t\t\t//console.log(err);\n" +
+                "\t\t}\n" +
+                "\t\t\n" +
+                "\t}, 10 * 1000);\n" +
+                "}\n" +
+                "\n" +
+                "webSocketStart();";
 
         sb = new StringBuilder();
 

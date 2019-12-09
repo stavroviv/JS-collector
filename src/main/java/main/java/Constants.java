@@ -1,5 +1,5 @@
 package main.java;
 
 public class Constants {
-    public static final int JETTY_PORT = 15300;
+    public static int JETTY_PORT = 15300;
 }
