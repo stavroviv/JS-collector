@@ -93,8 +93,9 @@ public class ExtCollector extends AnAction {
     }
 
     static void showMessage(IdeFrame ideFrame, String message, MessageType messageType) {
+        String html = "<html><body>" + message + "</body></html>";
         JBPopupFactory.getInstance()
-                .createHtmlTextBalloonBuilder(message, messageType, null)
+                .createHtmlTextBalloonBuilder(html, messageType, null)
                 .setFadeoutTime(10_000)
                 .createBalloon()
                 .show(RelativePoint.getCenterOf(ideFrame.getStatusBar().getComponent()), Balloon.Position.above);
@@ -112,9 +113,9 @@ public class ExtCollector extends AnAction {
             boolean fileChanges = JsFilesCollector.runCollector(basedir, targetDirectoryName);
 
             if (fileChanges) {
-                showMessage(ideFrame, "Изменений НЕТ.", MessageType.INFO);
+                showMessage(ideFrame, "Изменений не обнаружено", MessageType.INFO);
             } else {
-                showMessage(ideFrame, "Файлы собраны. ЕСТЬ Изменения.", MessageType.INFO);
+                showMessage(ideFrame, "Файлы собраны. Есть изменения", MessageType.INFO);
                 if (ChromeUpdate.isStatus()) {
                     for (Session s : CustomSocket.sessions) {
                         try {

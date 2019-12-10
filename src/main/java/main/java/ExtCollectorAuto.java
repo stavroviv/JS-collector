@@ -42,11 +42,11 @@ public class ExtCollectorAuto extends AnAction {
                 WindowManager.getInstance().suggestParentWindow(project).addWindowFocusListener(
                         new CustomWindowFocusListener(anActionEvent)
                 );
-                message = "Автосборка ВКЛЮЧЕНА";
+                message = "Автосборка включена";
                 anActionEvent.getPresentation().setIcon(IconLoader.getIcon("/icons/sencha_color_smal.png"));
             } else {
                 WindowManager.getInstance().suggestParentWindow(project).removeWindowFocusListener(ifMy);
-                message = "Автосборка ВЫКЛЮЧЕНА";
+                message = "Автосборка отключена";
                 anActionEvent.getPresentation().setIcon(IconLoader.getIcon("/icons/sencha_gray_smal.png"));
             }
             ExtCollector.showMessage(ideFrame, message, MessageType.INFO);

@@ -9,7 +9,6 @@ import com.intellij.openapi.wm.IdeFrame;
 import com.intellij.openapi.wm.WindowManager;
 import org.jetbrains.annotations.NotNull;
 
-
 public class ChromeUpdate extends AnAction {
 
     private static boolean status = false;
@@ -36,12 +35,12 @@ public class ChromeUpdate extends AnAction {
         if (!isStatus()) {
             presentation.setIcon(IconLoader.getIcon("/icons/chrome2_small.png"));
             setStatus(true);
-            message = "Автообновление браузера ВКЛЮЧЕНО";
+            message = "Автообновление браузера включено";
             System.out.println("on");
         } else {
             presentation.setIcon(IconLoader.getIcon("/icons/chrome2_small_grey.png"));
             setStatus(false);
-            message = "Автообновление браузера ВЫКЛЮЧЕНА";
+            message = "Автообновление браузера отключено";
             System.out.println("off");
         }
         ExtCollector.showMessage(ideFrame, message, MessageType.INFO);
