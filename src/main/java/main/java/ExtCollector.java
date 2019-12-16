@@ -130,9 +130,10 @@ public class ExtCollector extends AnAction {
         } catch (WrongApplicationException ex) {
             showMessage(ideFrame, "Не то приложение!", MessageType.ERROR);
         } catch (Exception ex) {
-            StringWriter errors = new StringWriter();
-            ex.printStackTrace(new PrintWriter(errors));
-            showMessage(ideFrame, errors.toString(), MessageType.ERROR);
+//            StringWriter errors = new StringWriter();
+//            ex.printStackTrace(new PrintWriter(errors));
+            String errorMessage = "Произошла ошибка";
+            showMessage(ideFrame, errorMessage, MessageType.ERROR);
         }
     }
 

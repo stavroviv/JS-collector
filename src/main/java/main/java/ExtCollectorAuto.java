@@ -51,9 +51,10 @@ public class ExtCollectorAuto extends AnAction {
             }
             ExtCollector.showMessage(ideFrame, message, MessageType.INFO);
         } catch (Exception ex) {
-            StringWriter errors = new StringWriter();
-            ex.printStackTrace(new PrintWriter(errors));
-            ExtCollector.showMessage(ideFrame, errors.toString(), MessageType.ERROR);
+//            StringWriter errors = new StringWriter();
+//            ex.printStackTrace(new PrintWriter(errors));
+            String errorMessage = "Произошла ошибка";
+            ExtCollector.showMessage(ideFrame, errorMessage, MessageType.ERROR);
         }
     }
 }

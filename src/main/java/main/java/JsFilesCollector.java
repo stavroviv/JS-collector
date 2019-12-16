@@ -93,20 +93,9 @@ public class JsFilesCollector {
                 "\tws.onmessage = function(event) {                   \n" +
                 "\t\twindow.location.reload(true);\n" +
                 "\t};\n" +
+                "};\n" +
                 "\n" +
-                "\tsetInterval(function() { \n" +
-                "\n" +
-                "\t\ttry {\n" +
-                "\t\t\t//console.log('something');\n" +
-                "\t\t\tws.send('something');\n" +
-                "\t\t} catch(err) { \n" +
-                "\t\t\t//console.log(err);\n" +
-                "\t\t}\n" +
-                "\t\t\n" +
-                "\t}, 10 * 1000);\n" +
-                "}\n" +
-                "\n" +
-                "webSocketStart();";
+                "webSocketStart();\n\n";
 
         sb = new StringBuilder();
 
@@ -173,8 +162,8 @@ public class JsFilesCollector {
         args[5] = basedir + "/target/" + targetDirectoryName + "/resources/CRM/appCRMCollective.js";
 
         return (utilRun(args[0], args[1], basedir, true)
-                & utilRun(args[2], args[3], basedir, false)
-                & utilRun(args[4], args[5], basedir, false));
+                & utilRun(args[2], args[3], basedir, true)
+                & utilRun(args[4], args[5], basedir, true));
     }
 
 }
