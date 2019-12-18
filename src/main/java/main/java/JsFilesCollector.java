@@ -93,10 +93,18 @@ public class JsFilesCollector {
                 "\tws.onmessage = function(event) {                   \n" +
                 "\t\twindow.location.reload(true);\n" +
                 "\t};\n" +
-                "};\n" +
                 "\n" +
-                "webSocketStart();\n\n";
-
+                "\tsetInterval(function() { \n" +
+                "\n" +
+                "\t\ttry {\n" +
+                "\t\t\tws.send('something');\n" +
+                "\t\t} catch(err) { \n" +
+                "\t\t}\n" +
+                "\t\t\n" +
+                "\t}, 10 * 1000);\n" +
+                "}\n" +
+                "\n" +
+                "webSocketStart();";
         sb = new StringBuilder();
 
         if (addReloadScript) {
