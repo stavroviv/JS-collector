@@ -17,7 +17,7 @@
 
     <actions>
         <action id="main.java.FuckingGreatAdvice" class="main.java.FuckingGreatAdvice" text="Получить совет" description="Получить совет"
-                icon="/icons/sencha-small.png">
+                icon="/icons/advice-small.png">
             <add-to-group group-id="ToolbarRunGroup" anchor="after" relative-to-action="Stop"/>
         </action>
         <action id="main.java.ChromeUpdate" class="main.java.ChromeUpdate" text="Вкл/Выкл автообновления браузера" description="Вкл/Выкл автообновления браузера"
