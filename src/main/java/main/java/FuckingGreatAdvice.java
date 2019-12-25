@@ -53,7 +53,7 @@ public class FuckingGreatAdvice extends AnAction {
 
                 index = result.indexOf("\"");
 
-                result = result.substring(0, index - 1);
+                result = result.substring(0, index);
 
 //                System.out.println(result);
 
