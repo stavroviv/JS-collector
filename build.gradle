@@ -28,6 +28,7 @@ dependencies {
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
     version 'IU-2019.3'
+    intellij.updateSinceUntilBuild false
 }
 patchPluginXml {
     changeNotes """
