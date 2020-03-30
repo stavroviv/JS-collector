@@ -19,6 +19,7 @@ import org.eclipse.jetty.websocket.api.Session;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 import static main.java.Constants.JETTY_PORT;
 
@@ -93,7 +94,7 @@ public class ExtCollector extends AnAction {
     }
 
     static void showMessage(IdeFrame ideFrame, String message, MessageType messageType) {
-        String html = "<html><body>" + message + "</body></html>";
+        String html = "<html><body>" + (new String(message.getBytes(), StandardCharsets.UTF_8)) + "</body></html>";
         JBPopupFactory.getInstance()
                 .createHtmlTextBalloonBuilder(html, messageType, null)
                 .setFadeoutTime(10_000)

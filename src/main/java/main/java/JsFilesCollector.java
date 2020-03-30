@@ -29,7 +29,11 @@ public class JsFilesCollector {
     }
 
     private static void addSandboxFiles(String baseDir) throws Exception {
-        File sandboxAppDir = new File(baseDir + "/src/main/webapp/resources/extjs6-sandbox/app");
+        String separator = File.separator;
+        File sandboxAppDir = new File(baseDir + separator + "src" + separator +
+                "main" + separator + "webapp" + separator + "resources" + separator +
+                "extjs6-sandbox" + separator + "app"
+        );
         for (File file : sandboxAppDir.listFiles()) {
             if (file.isDirectory()) {
                 fetchFiles(file);
@@ -57,7 +61,7 @@ public class JsFilesCollector {
             writeFile(key);
         }
         if (!extJSFile.alreadyWritten) {
-            sb.append(extJSFile.contentWithoutRequires).append("\n");
+            sb.append(extJSFile.contentWithoutRequires).append(System.lineSeparator());
             extJSFile.alreadyWritten = true;
         }
     }
@@ -75,7 +79,7 @@ public class JsFilesCollector {
             BufferedReader br = new BufferedReader(new FileReader(tempFile));
             String st;
             while ((st = br.readLine()) != null) {
-                contentBuilder.append(st).append("\n");
+                contentBuilder.append(st).append(System.lineSeparator());
             }
             return contentBuilder;
         } catch (IOException e) {
@@ -86,24 +90,25 @@ public class JsFilesCollector {
 
     private static boolean generateCollectiveFile(Boolean addReloadScript)
             throws FileNotFoundException, UnsupportedEncodingException {
-        String reloadScript = "function webSocketStart() {\n" +
-                "\n" +
-                "\tvar ws = new WebSocket(\"ws://localhost:" + JETTY_PORT + "/events/\");\n" +
-                "\n" +
-                "\tws.onmessage = function(event) {                   \n" +
-                "\t\twindow.location.reload(true);\n" +
-                "\t};\n" +
-                "\n" +
-                "\tsetInterval(function() { \n" +
-                "\n" +
-                "\t\ttry {\n" +
-                "\t\t\tws.send('something');\n" +
-                "\t\t} catch(err) { \n" +
-                "\t\t}\n" +
-                "\t\t\n" +
-                "\t}, 10 * 1000);\n" +
-                "}\n" +
-                "\n" +
+        String separator = System.lineSeparator();
+        String reloadScript = "function webSocketStart() {" +
+                separator +
+                "\tvar ws = new WebSocket(\"ws://localhost:" + JETTY_PORT + "/events/\");" +
+                separator +
+                "\tws.onmessage = function(event) { " + separator +
+                "\t\twindow.location.reload(true);" + separator +
+                "\t};" +
+                separator +
+                "\tsetInterval(function() { " +
+                separator +
+                "\t\ttry {" + separator +
+                "\t\t\tws.send('something');" + separator +
+                "\t\t} catch(err) { " + separator +
+                "\t\t}" + separator +
+                "\t\t" + separator +
+                "\t}, 10 * 1000);" + separator +
+                "}" +
+                separator +
                 "webSocketStart();";
         sb = new StringBuilder();
 
@@ -162,12 +167,20 @@ public class JsFilesCollector {
     public static boolean runCollector(String basedir, String targetDirectoryName) throws Exception {
         String[] args = new String[6];
 
-        args[0] = basedir + "/src/main/webapp/resources/extjs6-sandbox/app";
-        args[1] = basedir + "/target/" + targetDirectoryName + "/resources/extjs6-sandbox/appCollective.js";
-        args[2] = basedir + "/src/main/webapp/resources/admin-dashboard/app";
-        args[3] = basedir + "/target/" + targetDirectoryName + "/resources/admin-dashboard/appDashboardCollective.js";
-        args[4] = basedir + "/src/main/webapp/resources/CRM/app";
-        args[5] = basedir + "/target/" + targetDirectoryName + "/resources/CRM/appCRMCollective.js";
+        String separator = File.separator;
+
+        String resources = separator + "src" + separator + "main" + separator + "webapp" + separator + "resources";
+        String target = separator + "target" + separator;
+        String baseTarget = basedir + target + targetDirectoryName + separator + "resources" + separator;
+
+        args[0] = basedir + resources + separator + "extjs6-sandbox" + separator + "app";
+        args[1] = baseTarget + "extjs6-sandbox" + separator + "appCollective.js";
+
+        args[2] = basedir + resources + separator + "admin-dashboard" + separator + "app";
+        args[3] = baseTarget + "admin-dashboard" + separator + "appDashboardCollective.js";
+
+        args[4] = basedir + resources + separator + "CRM" + separator + "app";
+        args[5] = baseTarget + "CRM" + separator + "appCRMCollective.js";
 
         return (utilRun(args[0], args[1], basedir, true)
                 & utilRun(args[2], args[3], basedir, true)
