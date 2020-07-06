@@ -16,13 +16,13 @@ public class JsFilesCollector {
     static String appName;
     static boolean useSandboxData;
 
-    private static void fetchFiles(File dir) throws Exception {
+    private static void fetchFiles(File dir, String baseDir) throws Exception {
         if (dir.isDirectory()) {
             for (File file : dir.listFiles()) {
-                fetchFiles(file);
+                fetchFiles(file, baseDir);
             }
         } else {
-            ExtJSFile extJSFile = new ExtJSFile(dir);
+            ExtJSFile extJSFile = new ExtJSFile(dir, baseDir);
             fileMap.put(extJSFile.name, extJSFile);
             fileCount++;
         }
@@ -32,14 +32,14 @@ public class JsFilesCollector {
         File sandboxAppDir = new File(baseDir + "/src/main/webapp/resources/extjs6-sandbox/app");
         for (File file : sandboxAppDir.listFiles()) {
             if (file.isDirectory()) {
-                fetchFiles(file);
+                fetchFiles(file, baseDir);
             }
         }
     }
 
     private static void iterateOverAllFiles(String baseDir) throws Exception {
         File file = new File(root);
-        fetchFiles(file);
+        fetchFiles(file, baseDir);
         if (useSandboxData) {
             addSandboxFiles(baseDir);
         }
