@@ -8,6 +8,7 @@ import static main.java.Constants.JETTY_PORT;
 
 public class JsFilesCollector {
 
+    private static final String RESOURCES_EXTJS_6_SANDBOX_APP = "/src/main/webapp/resources/extjs6-sandbox/app";
     static StringBuilder sb;
     static String root;
     static String outFile;
@@ -29,7 +30,7 @@ public class JsFilesCollector {
     }
 
     private static void addSandboxFiles(String baseDir) throws Exception {
-        File sandboxAppDir = new File(baseDir + "/src/main/webapp/resources/extjs6-sandbox/app");
+        File sandboxAppDir = new File(baseDir + RESOURCES_EXTJS_6_SANDBOX_APP);
         for (File file : sandboxAppDir.listFiles()) {
             if (file.isDirectory()) {
                 fetchFiles(file, baseDir);
@@ -162,7 +163,7 @@ public class JsFilesCollector {
     public static boolean runCollector(String basedir, String targetDirectoryName) throws Exception {
         String[] args = new String[6];
 
-        args[0] = basedir + "/src/main/webapp/resources/extjs6-sandbox/app";
+        args[0] = basedir + RESOURCES_EXTJS_6_SANDBOX_APP;
         args[1] = basedir + "/target/" + targetDirectoryName + "/resources/extjs6-sandbox/appCollective.js";
         args[2] = basedir + "/src/main/webapp/resources/admin-dashboard/app";
         args[3] = basedir + "/target/" + targetDirectoryName + "/resources/admin-dashboard/appDashboardCollective.js";
