@@ -13,9 +13,9 @@ import java.util.*;
 import static org.apache.commons.lang.StringUtils.isBlank;
 
 class ExtJSFile {
-    private static final String CRM_APPLICATION_PROPERTIES_PATH = "/src/main/resources/application.properties";
-    private static final String JS_FILES_COLLECTOR_TARGET = "jsFilesCollector.target";
-    private static final String JS_FILES_COLLECTOR_REPLACE = "jsFilesCollector.replace";
+    private static final String CRM_JS_FILES_COLLECTOR_PROPERTIES = "/src/main/resources/jsFilesCollector.properties";
+    private static final String TARGET = "target";
+    private static final String REPLACE = "replace";
 
     String name;
     String path;
@@ -61,13 +61,13 @@ class ExtJSFile {
     private Map<String, String> getReplacements(String baseDir) {
         Properties properties = new Properties();
         try {
-            properties.load(new FileInputStream(baseDir + CRM_APPLICATION_PROPERTIES_PATH));
+            properties.load(new FileInputStream(baseDir + CRM_JS_FILES_COLLECTOR_PROPERTIES));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        String[] targets = getStringsProperty(properties, JS_FILES_COLLECTOR_TARGET);
-        String[] replacements = getStringsProperty(properties, JS_FILES_COLLECTOR_REPLACE);
+        String[] targets = getStringsProperty(properties, TARGET);
+        String[] replacements = getStringsProperty(properties, REPLACE);
 
         if (targets.length != replacements.length) {
             System.out.println("Target and replace size not equals");
